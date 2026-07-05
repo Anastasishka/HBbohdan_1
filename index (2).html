@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для мого лева 🦁</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #180F0A;
+    --bg-alt: #241609;
+    --card: #2E1D10;
+    --card-2: #35210f;
+    --gold: #E3A13B;
+    --gold-soft: #F0C878;
+    --rose: #E08B93;
+    --rose-soft: #f2b9be;
+    --cream: #F7ECDA;
+    --muted: #C7AF93;
+    --line: rgba(247,236,218,0.12);
+    --shadow: rgba(0,0,0,0.45);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 600px at 85% -10%, rgba(227,161,59,0.16), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(224,139,147,0.10), transparent 55%),
+      var(--bg);
+    color: var(--cream);
+    font-family: 'Manrope', sans-serif;
+    padding-bottom: 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap{ max-width: 860px; margin: 0 auto; padding: 28px 20px 40px; }
+
+  /* ---------- TOP BRAND ---------- */
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Space Mono', monospace;
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .brand .dot{ width:6px; height:6px; border-radius:50%; background: var(--gold); display:inline-block; }
+
+  /* ---------- SECTIONS ---------- */
+  .page{ display:none; animation: fadeIn .45s ease; }
+  .page.active{ display:block; }
+  @keyframes fadeIn{ from{ opacity:0; transform: translateY(6px);} to{opacity:1; transform:none;} }
+
+  /* ---------- HERO (signature mane) ---------- */
+  .hero{
+    position:relative;
+    padding: 46px 10px 30px;
+    display:flex; flex-direction:column; align-items:center;
+    text-align:center;
+    overflow: visible;
+  }
+  .mane{
+    position:absolute; top: 6px; left:50%; transform:translateX(-50%);
+    width: 300px; height:300px; z-index:0;
+    animation: spin 90s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce){ .mane{ animation:none; } }
+  @keyframes spin{ to{ transform: translateX(-50%) rotate(360deg);} }
+  .mane .ray{
+    position:absolute; top:50%; left:50%; width:10px; height:130px;
+    margin-left:-5px; margin-top:-150px;
+    border-radius: 50% 50% 40% 40%;
+    background: linear-gradient(180deg, var(--gold) 0%, rgba(227,161,59,0) 100%);
+    opacity:0.55;
+    transform-origin: 50% 150px;
+    filter: blur(0.3px);
+  }
+  .mane .ray:nth-child(odd){ background: linear-gradient(180deg, var(--rose) 0%, rgba(224,139,147,0) 100%); opacity:0.4; }
+
+  .hero-inner{ position:relative; z-index:1; }
+  .eyebrow{
+    font-family:'Space Mono', monospace; font-size:12px; letter-spacing:0.18em;
+    text-transform:uppercase; color: var(--gold-soft); margin-bottom:14px; display:block;
+  }
+  h1.title{
+    font-family:'Fraunces', serif; font-style:italic; font-weight:600;
+    font-size: clamp(34px, 8vw, 56px); line-height:1.05; margin:0 0 14px;
+    color: var(--cream);
+  }
+  .title em{ color: var(--gold); font-style:italic; }
+  .hero p.sub{ color: var(--muted); font-size:15px; max-width:420px; margin:0 auto; line-height:1.6; }
+
+  /* ---------- WISH CARDS ---------- */
+  .deck{
+    display:grid; grid-template-columns: repeat(2, 1fr); gap:14px;
+    margin-top: 38px;
+  }
+  @media (max-width:520px){ .deck{ grid-template-columns: 1fr; } }
+
+  .note{
+    background: linear-gradient(155deg, var(--card), var(--card-2));
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 18px;
+    box-shadow: 0 10px 24px var(--shadow);
+    font-family:'Fraunces', serif; font-size: 18px; line-height:1.4;
+    color: var(--cream);
+    transition: transform .25s ease, box-shadow .25s ease;
+    cursor: default;
+  }
+  .note:hover{ transform: translateY(-4px) rotate(0deg) !important; box-shadow: 0 16px 30px var(--shadow); }
+  .note.strong{ font-style: italic; color: var(--gold-soft); font-weight:600; }
+  .note .tag{ display:block; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--rose-soft); margin-top:10px; }
+
+  .note:nth-child(4n+1){ transform: rotate(-1.4deg); }
+  .note:nth-child(4n+2){ transform: rotate(1deg); }
+  .note:nth-child(4n+3){ transform: rotate(-0.6deg); }
+  .note:nth-child(4n+4){ transform: rotate(1.6deg); }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section-head{ margin: 8px 0 22px; }
+  .section-head .eyebrow{ margin-bottom: 8px; }
+  h2.section-title{
+    font-family:'Fraunces', serif; font-weight:600; font-size: clamp(26px, 6vw, 34px);
+    margin:0; color: var(--cream);
+  }
+  .section-head p{ color: var(--muted); margin: 8px 0 0; font-size:14px; max-width: 480px; }
+
+  /* ---------- ALBUM ---------- */
+  .album-toolbar{ display:flex; gap:10px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
+  .btn{
+    font-family:'Manrope',sans-serif; font-weight:700; font-size:14px;
+    border:none; border-radius:999px; padding:12px 20px; cursor:pointer;
+    background: linear-gradient(135deg, var(--gold), var(--rose));
+    color: #221306; box-shadow: 0 8px 18px rgba(227,161,59,0.25);
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 22px rgba(227,161,59,0.35); }
+  .btn:active{ transform: translateY(0); }
+  .btn.ghost{
+    background: transparent; color: var(--muted); border:1px solid var(--line); box-shadow:none;
+  }
+  .btn.ghost:hover{ color: var(--cream); border-color: var(--gold); }
+  input[type=file]{ display:none; }
+
+  .grid-photos{
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  @media (max-width:560px){ .grid-photos{ grid-template-columns: repeat(2, 1fr); } }
+
+  .photo-card{
+    position:relative; aspect-ratio: 1/1; border-radius:14px; overflow:hidden;
+    background: var(--card); border:1px solid var(--line); cursor:pointer;
+  }
+  .photo-card img{ width:100%; height:100%; object-fit:cover; display:block; transition: transform .3s ease; }
+  .photo-card:hover img{ transform: scale(1.06); }
+  .photo-card .del{
+    position:absolute; top:6px; right:6px; width:26px; height:26px; border-radius:50%;
+    background: rgba(24,15,10,0.75); color: var(--cream); border:none; font-size:14px;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0;
+    transition: opacity .2s ease;
+  }
+  .photo-card:hover .del{ opacity:1; }
+
+  .empty-state{
+    border: 1px dashed var(--line); border-radius:16px; padding: 40px 20px; text-align:center;
+    color: var(--muted); font-size:14px;
+  }
+  .empty-state .big{ font-family:'Fraunces', serif; font-style:italic; font-size:20px; color:var(--gold-soft); display:block; margin-bottom:8px; }
+
+  .gh-settings{ margin-bottom: 18px; }
+  .gh-toggle{
+    width:100%; text-align:left; background: var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:12px 16px; color: var(--muted); font-family:'Manrope',sans-serif;
+    font-weight:700; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:8px;
+  }
+  .gh-toggle:hover{ color: var(--cream); border-color: var(--gold); }
+  .status-dot{ width:8px; height:8px; border-radius:50%; display:inline-block; margin-left:auto; }
+  .status-dot.off{ background: var(--rose); }
+  .status-dot.on{ background: #6fbf73; }
+  .gh-panel{
+    display:none; background: var(--card); border:1px solid var(--line); border-top:none;
+    border-radius: 0 0 12px 12px; padding: 16px; margin-top:-1px;
+  }
+  .gh-panel.open{ display:block; }
+  .gh-help{ font-size:13px; color: var(--muted); line-height:1.6; margin: 0 0 14px; }
+  .gh-help a{ color: var(--gold-soft); }
+  .gh-row{ display:flex; gap:8px; margin-bottom:10px; }
+  .gh-row input{
+    flex:1; background: var(--bg-alt); border:1px solid var(--line); border-radius:10px;
+    padding: 11px 14px; color: var(--cream); font-family:'Space Mono', monospace; font-size:13px;
+  }
+  .gh-row input:focus{ outline:none; border-color: var(--gold); }
+  .btn.small{ padding: 9px 14px; font-size:12px; }
+
+  .upload-status{
+    font-family:'Space Mono', monospace; font-size:12px; color: var(--gold-soft);
+    min-height: 18px; margin: 4px 0 14px;
+  }
+  .upload-status.error{ color: var(--rose); }
+
+  .photo-card.uploading{ opacity:0.5; }
+  .photo-card .spinner{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background: rgba(24,15,10,0.5); font-size:20px;
+  }
+
+  .dropzone{
+    border: 2px dashed var(--line); border-radius: 20px;
+    padding: 46px 20px; text-align:center; cursor:pointer;
+    transition: border-color .2s ease, background .2s ease;
+    margin-bottom: 18px;
+  }
+  .dropzone:hover, .dropzone.drag{
+    border-color: var(--gold);
+    background: rgba(227,161,59,0.06);
+  }
+  .dropzone .icon{ font-size: 30px; display:block; margin-bottom: 10px; }
+  .dropzone .big{ font-family:'Fraunces', serif; font-style:italic; font-size:20px; color:var(--gold-soft); display:block; margin-bottom:6px; }
+  .dropzone .hint{ color: var(--muted); font-size:13px; }
+
+  .lightbox{
+    position:fixed; inset:0; background: rgba(10,6,3,0.92); z-index:100;
+    display:none; align-items:center; justify-content:center; padding: 30px;
+  }
+  .lightbox.active{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:80vh; border-radius:12px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+  .lightbox .close{
+    position:absolute; top:20px; right:24px; background:none; border:none; color:var(--cream);
+    font-size:28px; cursor:pointer; line-height:1;
+  }
+
+  /* ---------- IDEAS ---------- */
+  .idea-form{ display:flex; gap:10px; margin-bottom: 24px; }
+  .idea-form input[type=text]{
+    flex:1; background: var(--card); border:1px solid var(--line); border-radius:12px;
+    padding: 13px 16px; color: var(--cream); font-family:'Manrope',sans-serif; font-size:15px;
+  }
+  .idea-form input[type=text]::placeholder{ color: var(--muted); }
+  .idea-form input[type=text]:focus{ outline:none; border-color: var(--gold); }
+
+  .idea-list{ display:flex; flex-direction:column; gap:10px; }
+  .idea-item{
+    display:flex; align-items:center; gap:12px;
+    background: linear-gradient(155deg, var(--card), var(--card-2));
+    border:1px solid var(--line); border-radius:14px; padding: 14px 16px;
+  }
+  .idea-item .check{
+    width:22px; height:22px; border-radius:50%; border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;
+    font-size:12px; color: var(--gold);
+    transition: background .2s ease;
+  }
+  .idea-item.done .check{ background: var(--gold); color:#221306; }
+  .idea-item .txt{ flex:1; font-size:15px; line-height:1.4; }
+  .idea-item.done .txt{ text-decoration: line-through; color: var(--muted); }
+  .idea-item .del{
+    background:none; border:none; color: var(--muted); font-size:16px; cursor:pointer; padding:4px;
+  }
+  .idea-item .del:hover{ color: var(--rose); }
+
+  .idea-count{ font-family:'Space Mono', monospace; font-size:12px; color: var(--muted); margin-bottom:14px; letter-spacing:0.05em; }
+
+  /* ---------- BOTTOM NAV ---------- */
+  nav.tabbar{
+    position: fixed; bottom: 18px; left:50%; transform:translateX(-50%);
+    display:flex; gap: 4px; background: rgba(46,29,16,0.9);
+    backdrop-filter: blur(10px);
+    border:1px solid var(--line); border-radius: 999px; padding:6px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5); z-index: 50;
+  }
+  nav.tabbar button{
+    display:flex; align-items:center; gap:8px; border:none; background:none; cursor:pointer;
+    color: var(--muted); font-family:'Manrope',sans-serif; font-weight:700; font-size:13px;
+    padding: 10px 16px; border-radius:999px; transition: all .2s ease;
+  }
+  nav.tabbar button svg{ width:18px; height:18px; stroke: currentColor; fill:none; }
+  nav.tabbar button.active{ background: linear-gradient(135deg, var(--gold), var(--rose)); color:#221306; }
+  nav.tabbar button .label{ display:none; }
+  @media (min-width:480px){ nav.tabbar button .label{ display:inline; } }
+
+  ::selection{ background: var(--gold); color:#221306; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="brand"><span class="dot"></span> для мого лева</div>
+
+  <!-- ================= PAGE 1: WISHES ================= -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <div class="mane" id="mane"></div>
+      <div class="hero-inner">
+        <span class="eyebrow">невеличкий закуток лише для тебе</span>
+        <h1 class="title">Все, що я<br>хочу тобі <em>сказати</em></h1>
+        <p class="sub">Тут — усе, що я думаю про тебе, коли мовчу. Читай у будь-якому порядку.</p>
+      </div>
+    </div>
+
+    <div class="deck" id="deck"></div>
+  </section>
+
+  <!-- ================= PAGE 2: ALBUM ================= -->
+  <section class="page" id="page-album">
+    <div class="section-head">
+      <span class="eyebrow">наш альбом</span>
+      <h2 class="section-title">Ми у фотографіях</h2>
+      <p>Фото зберігаються прямо в репозиторії сайту на GitHub — завантажив(ла) один раз, і вони назавжди тут, для всіх, хто відкриє сайт.</p>
+    </div>
+
+    <div class="gh-settings" id="ghSettings">
+      <button class="gh-toggle" id="ghToggle">⚙ Налаштування завантаження <span id="ghStatusDot" class="status-dot off"></span></button>
+      <div class="gh-panel" id="ghPanel">
+        <p class="gh-help">
+          Щоб мати змогу додавати фото, потрібен персональний GitHub-токен (тільки для тебе, зберігається лише в цьому браузері, нікуди більше не надсилається).<br>
+          Створи його тут: <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> →
+          «Generate new token» → обери репозиторій <b>HBbohdan</b> → у Permissions постав <b>Contents: Read and write</b> → Generate → скопіюй токен.
+        </p>
+        <div class="gh-row">
+          <input type="password" id="ghTokenInput" placeholder="Встав токен сюди (ghp_... або github_pat_...)">
+          <button class="btn" id="ghSaveToken">Зберегти</button>
+        </div>
+        <button class="btn ghost small" id="ghClearToken">Забути токен на цьому пристрої</button>
+      </div>
+    </div>
+
+    <label class="dropzone" id="dropzone" for="fileInput">
+      <span class="icon">🖼️</span>
+      <span class="big">Перетягни фото сюди</span>
+      <span class="hint">або натисни, щоб обрати з пристрою — можна кілька одразу</span>
+    </label>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+
+    <div class="upload-status" id="uploadStatus"></div>
+
+    <div class="album-toolbar">
+      <button class="btn ghost" id="refreshAlbum">Оновити список</button>
+    </div>
+
+    <div id="albumWrap"></div>
+  </section>
+
+  <!-- ================= PAGE 3: IDEAS ================= -->
+  <section class="page" id="page-ideas">
+    <div class="section-head">
+      <span class="eyebrow">спільні плани</span>
+      <h2 class="section-title">Що зробимо разом</h2>
+      <p>Записуй ідеї для побачень, поїздок чи дурниць — і відмічай, коли втілимо.</p>
+    </div>
+
+    <div class="idea-form">
+      <input type="text" id="ideaInput" placeholder="Напр.: подивитись захід сонця на даху…">
+      <button class="btn" id="addIdea">Додати</button>
+    </div>
+
+    <div class="idea-count" id="ideaCount"></div>
+    <div class="idea-list" id="ideaList"></div>
+  </section>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<!-- Bottom navigation -->
+<nav class="tabbar">
+  <button class="tab-btn active" data-page="page-home">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+    <span class="label">Побажання</span>
+  </button>
+  <button class="tab-btn" data-page="page-album">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+    <span class="label">Альбом</span>
+  </button>
+  <button class="tab-btn" data-page="page-ideas">
+    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.5.4.8 1 .8 1.6v.5h5.4v-.5c0-.6.3-1.2.8-1.6A6 6 0 0 0 12 3z"/></svg>
+    <span class="label">Ідеї</span>
+  </button>
+</nav>
+
+<script>
+  // ---------- Navigation ----------
+  const tabs = document.querySelectorAll('.tab-btn');
+  const pages = document.querySelectorAll('.page');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      pages.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.page).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // ---------- Hero mane (signature element) ----------
+  const mane = document.getElementById('mane');
+  const RAYS = 16;
+  for(let i=0;i<RAYS;i++){
+    const r = document.createElement('div');
+    r.className = 'ray';
+    r.style.transform = `rotate(${(360/RAYS)*i}deg)`;
+    mane.appendChild(r);
+  }
+
+  // ---------- Wish cards ----------
+  const wishes = [
+    { text: "Ти мені подобаєшся. До речі, це зовсім не новина.", tag: "щоденне визнання" },
+    { text: "Мій лев.", strong:true, tag: "прізвисько № 1" },
+    { text: "Мій володар.", strong:true, tag: "прізвисько № 2" },
+    { text: "Найкраща частина дня — та, коли ти поруч." },
+    { text: "Твоя усмішка — моя постійна слабкість." },
+    { text: "Дякую, що ти просто є." },
+    { text: "З тобою затишно навіть у мовчанні." },
+    { text: "Ти — дім, який я обираю щодня." },
+    { text: "Люблю, як ти дивишся на мене, коли думаєш, що я не бачу." },
+    { text: "Моє серце впізнає тебе будь-де." },
+    { text: "Ти найкраще, що зі мною сталося." },
+    { text: "Обійняла б зараз, якби могла дотягнутися крізь екран." },
+    { text: "Пишаюся тобою. Завжди, а не лише в вдалі дні." },
+    { text: "Мій. І крапка.", strong:true, tag: "факт" },
+  ];
+  const deck = document.getElementById('deck');
+  wishes.forEach(w=>{
+    const el = document.createElement('div');
+    el.className = 'note' + (w.strong ? ' strong' : '');
+    el.innerHTML = w.text + (w.tag ? `<span class="tag">${w.tag}</span>` : '');
+    deck.appendChild(el);
+  });
+
+  // ---------- Storage helpers ----------
+  function loadJSON(key, fallback){
+    try{
+      const v = localStorage.getItem(key);
+      return v ? JSON.parse(v) : fallback;
+    }catch(e){ return fallback; }
+  }
+  function saveJSON(key, val){
+    try{ localStorage.setItem(key, JSON.stringify(val)); return true; }
+    catch(e){ alert('Не вдалося зберегти — сховище браузера переповнене. Спробуй додати менше або менші фото.'); return false; }
+  }
+
+  // ---------- Album (stored in a GitHub repo, so it's permanent for everyone) ----------
+  const GH_OWNER = 'Anastasishka';
+  const GH_REPO = 'HBbohdan';
+  const GH_BRANCH = 'main';
+  const GH_FOLDER = 'photos';
+
+  const albumWrap = document.getElementById('albumWrap');
+  const fileInput = document.getElementById('fileInput');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const uploadStatus = document.getElementById('uploadStatus');
+  let photos = []; // {name, sha, url}
+
+  function ghToken(){ return localStorage.getItem('gh_pat') || ''; }
+
+  function setStatus(msg, isError){
+    uploadStatus.textContent = msg || '';
+    uploadStatus.classList.toggle('error', !!isError);
+  }
+
+  function rawUrl(path){
+    return `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}?t=${Date.now()}`;
+  }
+
+  async function fetchAlbumList(){
+    setStatus('Завантажую список фото…');
+    try{
+      const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FOLDER}?ref=${GH_BRANCH}&_=${Date.now()}`, {
+        headers: { 'Accept': 'application/vnd.github+json' }
+      });
+      if(res.status === 404){ photos = []; setStatus(''); renderAlbum(); return; }
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      const data = await res.json();
+      photos = data
+        .filter(f => f.type === 'file' && /\.(png|jpe?g|gif|webp)$/i.test(f.name))
+        .map(f => ({ name: f.name, sha: f.sha, path: f.path }))
+        .sort((a,b)=> a.name < b.name ? 1 : -1);
+      setStatus('');
+      renderAlbum();
+    }catch(err){
+      setStatus('Не вдалося завантажити альбом. Перевір з’єднання й спробуй "Оновити список".', true);
+      renderAlbum();
+    }
+  }
+
+  function renderAlbum(){
+    if(photos.length === 0){
+      albumWrap.innerHTML = `<div class="empty-state"><span class="big">Поки що порожньо</span>Додай перше фото — почнемо збирати нашу історію.</div>`;
+      return;
+    }
+    const grid = document.createElement('div');
+    grid.className = 'grid-photos';
+    photos.forEach(p=>{
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      const src = rawUrl(p.path);
+      card.innerHTML = `<img src="${src}" alt="" loading="lazy"><button class="del" title="Видалити">×</button>`;
+      card.querySelector('img').addEventListener('click', ()=>{
+        lightboxImg.src = src;
+        lightbox.classList.add('active');
+      });
+      card.querySelector('.del').addEventListener('click', (e)=>{
+        e.stopPropagation();
+        deletePhoto(p);
+      });
+      grid.appendChild(card);
+    });
+    albumWrap.innerHTML = '';
+    albumWrap.appendChild(grid);
+  }
+
+  function fileToBase64(file){
+    return new Promise((resolve, reject)=>{
+      const reader = new FileReader();
+      reader.onload = ()=> resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function sanitizeName(name){
+    return name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+  }
+
+  async function uploadPhoto(file){
+    const token = ghToken();
+    if(!token){
+      setStatus('Спочатку встав GitHub-токен у налаштуваннях вище ⚙', true);
+      return;
+    }
+    const base64 = await fileToBase64(file);
+    const path = `${GH_FOLDER}/${Date.now()}-${sanitizeName(file.name)}`;
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${path}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': `token ${token}`
+      },
+      body: JSON.stringify({
+        message: `Додати фото: ${file.name}`,
+        content: base64,
+        branch: GH_BRANCH
+      })
+    });
+    if(!res.ok){
+      const body = await res.json().catch(()=>({}));
+      throw new Error(body.message || ('HTTP '+res.status));
+    }
+  }
+
+  async function handleFiles(fileList){
+    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    if(files.length === 0) return;
+    if(!ghToken()){
+      setStatus('Спочатку встав GitHub-токен у налаштуваннях вище ⚙', true);
+      openGhPanel();
+      return;
+    }
+    setStatus(`Завантажую ${files.length} фото… не закривай сторінку`);
+    let ok = 0, fail = 0;
+    for(const file of files){
+      try{ await uploadPhoto(file); ok++; }
+      catch(err){ fail++; console.error(err); }
+    }
+    setStatus(fail === 0
+      ? `Готово — додано ${ok} фото ✓`
+      : `Додано ${ok}, не вдалося ${fail}. Перевір права токена (Contents: Read and write).`, fail > 0);
+    await fetchAlbumList();
+  }
+
+  async function deletePhoto(p){
+    const token = ghToken();
+    if(!token){ setStatus('Потрібен токен, щоб видаляти фото.', true); openGhPanel(); return; }
+    if(!confirm('Видалити це фото назавжди?')) return;
+    setStatus('Видаляю…');
+    try{
+      const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${p.path}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `token ${token}`
+        },
+        body: JSON.stringify({ message: `Видалити фото: ${p.name}`, sha: p.sha, branch: GH_BRANCH })
+      });
+      if(!res.ok) throw new Error('HTTP '+res.status);
+      setStatus('Фото видалено.');
+      await fetchAlbumList();
+    }catch(err){
+      setStatus('Не вдалося видалити фото.', true);
+    }
+  }
+
+  fileInput.addEventListener('change', (e)=>{
+    handleFiles(e.target.files);
+    fileInput.value = '';
+  });
+
+  const dropzone = document.getElementById('dropzone');
+  ['dragenter','dragover'].forEach(evt=>{
+    dropzone.addEventListener(evt, (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      dropzone.classList.add('drag');
+    });
+  });
+  ['dragleave','drop'].forEach(evt=>{
+    dropzone.addEventListener(evt, (e)=>{
+      e.preventDefault(); e.stopPropagation();
+      dropzone.classList.remove('drag');
+    });
+  });
+  dropzone.addEventListener('drop', (e)=>{
+    if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length){
+      handleFiles(e.dataTransfer.files);
+    }
+  });
+
+  document.getElementById('refreshAlbum').addEventListener('click', fetchAlbumList);
+
+  document.getElementById('lightboxClose').addEventListener('click', ()=> lightbox.classList.remove('active'));
+  lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) lightbox.classList.remove('active'); });
+
+  // ---------- GitHub token settings panel ----------
+  const ghToggle = document.getElementById('ghToggle');
+  const ghPanel = document.getElementById('ghPanel');
+  const ghStatusDot = document.getElementById('ghStatusDot');
+  const ghTokenInput = document.getElementById('ghTokenInput');
+
+  function openGhPanel(){ ghPanel.classList.add('open'); }
+  function refreshGhStatus(){
+    const has = !!ghToken();
+    ghStatusDot.classList.toggle('on', has);
+    ghStatusDot.classList.toggle('off', !has);
+  }
+  ghToggle.addEventListener('click', ()=> ghPanel.classList.toggle('open'));
+  document.getElementById('ghSaveToken').addEventListener('click', ()=>{
+    const val = ghTokenInput.value.trim();
+    if(!val) return;
+    localStorage.setItem('gh_pat', val);
+    ghTokenInput.value = '';
+    refreshGhStatus();
+    setStatus('Токен збережено на цьому пристрої ✓');
+  });
+  document.getElementById('ghClearToken').addEventListener('click', ()=>{
+    localStorage.removeItem('gh_pat');
+    refreshGhStatus();
+    setStatus('Токен видалено з цього пристрою.');
+  });
+
+  refreshGhStatus();
+  fetchAlbumList();
+
+  // ---------- Ideas ----------
+  const ideaInput = document.getElementById('ideaInput');
+  const ideaList = document.getElementById('ideaList');
+  const ideaCount = document.getElementById('ideaCount');
+  let ideas = loadJSON('shared_ideas_v1', []);
+
+  function renderIdeas(){
+    const done = ideas.filter(i=>i.done).length;
+    ideaCount.textContent = ideas.length
+      ? `${done} / ${ideas.length} втілено`
+      : '';
+    if(ideas.length === 0){
+      ideaList.innerHTML = `<div class="empty-state"><span class="big">Список порожній</span>Запиши першу ідею для нас двох.</div>`;
+      return;
+    }
+    ideaList.innerHTML = '';
+    ideas.forEach(i=>{
+      const row = document.createElement('div');
+      row.className = 'idea-item' + (i.done ? ' done' : '');
+      row.innerHTML = `<div class="check">${i.done ? '✓' : ''}</div><div class="txt">${i.text}</div><button class="del">×</button>`;
+      row.querySelector('.check').addEventListener('click', ()=>{
+        i.done = !i.done;
+        saveJSON('shared_ideas_v1', ideas);
+        renderIdeas();
+      });
+      row.querySelector('.del').addEventListener('click', ()=>{
+        ideas = ideas.filter(x=>x.id !== i.id);
+        saveJSON('shared_ideas_v1', ideas);
+        renderIdeas();
+      });
+      ideaList.appendChild(row);
+    });
+  }
+
+  function addIdea(){
+    const text = ideaInput.value.trim();
+    if(!text) return;
+    ideas.push({ id: Date.now()+Math.random().toString(16).slice(2), text, done:false });
+    saveJSON('shared_ideas_v1', ideas);
+    ideaInput.value = '';
+    renderIdeas();
+  }
+
+  document.getElementById('addIdea').addEventListener('click', addIdea);
+  ideaInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') addIdea(); });
+
+  renderIdeas();
+</script>
+
+</body>
+</html>
