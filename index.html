@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Для мого лева 🦁</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -321,7 +322,7 @@
         <p class="gh-help">
           Щоб мати змогу додавати фото, потрібен персональний GitHub-токен (тільки для тебе, зберігається лише в цьому браузері, нікуди більше не надсилається).<br>
           Створи його тут: <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> →
-          «Generate new token» → обери репозиторій <b>HBbohdan_1</b> → у Permissions постав <b>Contents: Read and write</b> → Generate → скопіюй токен.
+          «Generate new token» → обери репозиторій <b>HBbohdan</b> → у Permissions постав <b>Contents: Read and write</b> → Generate → скопіюй токен.
         </p>
         <div class="gh-row">
           <input type="password" id="ghTokenInput" placeholder="Встав токен сюди (ghp_... або github_pat_...)">
@@ -414,19 +415,26 @@
 
   // ---------- Wish cards ----------
   const wishes = [
-    { text: "Ти мені подобаєшся. До речі, це зовсім не новина.", tag: "щоденне визнання" },
-    { text: "Мій лев.", strong:true, tag: "прізвисько № 1" },
-    { text: "Мій володар.", strong:true, tag: "прізвисько № 2" },
-    { text: "Найкраща частина дня — та, коли ти поруч." },
+    { text: "Будь щасливий", strong:true, tag: "побажання" },
+    { text: "Будь здоровенький", strong:true, tag: "побажання" },
+    { text: "Живи в кайф це життя, не думай про те що скажуть", strong:true, tag: "побажання" },
+    { text: "Роби те, що подобається", strong:true, tag: "побажання" },
+    { text: "Нехай тебе заіжди оточують тільки найпрекрасніші люди", strong:true, tag: "побажання" },
+    { text: "Хочу зробити тебе щасливим", strong:true, tag: "факт" },
+    { text: "Побільше грошей на всі хотєлки і реалізацію", strong:true, tag: "побажання" },
+    { text: "Ти мені подобаєшся, до речі", tag: "щоденне визнання" },
+    { text: "Мій лев.", strong:true, tag: "прізвисько № 2" },
+    { text: "Мій володар.", strong:true, tag: "прізвисько № 1" },
+    { text: "Найкраща частина дня — та, коли я тебе чую і бачу." },
     { text: "Твоя усмішка — моя постійна слабкість." },
     { text: "Дякую, що ти просто є." },
     { text: "З тобою затишно навіть у мовчанні." },
-    { text: "Ти — дім, який я обираю щодня." },
-    { text: "Люблю, як ти дивишся на мене, коли думаєш, що я не бачу." },
-    { text: "Моє серце впізнає тебе будь-де." },
-    { text: "Ти найкраще, що зі мною сталося." },
+    { text: "Ти — світ, який я обираю щодня" },
+    { text: "Люблю, як ти дивишся на мене, як горять твої очі." },
+    { text: "Пасасьомся?" },
+    { text: "Ти найкращий" },
     { text: "Обійняла б зараз, якби могла дотягнутися крізь екран." },
-    { text: "Пишаюся тобою. Завжди, а не лише в вдалі дні." },
+    { text: "Пишаюся тобою. Обожнюю тебе" },
     { text: "Мій. І крапка.", strong:true, tag: "факт" },
   ];
   const deck = document.getElementById('deck');
@@ -449,18 +457,23 @@
     catch(e){ alert('Не вдалося зберегти — сховище браузера переповнене. Спробуй додати менше або менші фото.'); return false; }
   }
 
-  // ---------- Album (stored in a GitHub repo, so it's permanent for everyone) ----------
+  // ---------- Album (stored in a private GitHub repo — only visible through this site) ----------
   const GH_OWNER = 'Anastasishka';
-  const GH_REPO = 'HBbohdan_1';
+  const GH_REPO = 'HBbohdan';
   const GH_BRANCH = 'main';
   const GH_FOLDER = 'photos';
+  // Токен лише для ЧИТАННЯ (Contents: Read-only), вбудований у сайт, щоб фото могли
+  // бачити всі, хто ввів пароль вище — без нього, оскільки репозиторій приватний,
+  // фото взагалі не завантажаться.
+  const GH_READ_TOKEN = "PASTE_YOUR_READONLY_TOKEN_HERE";
 
   const albumWrap = document.getElementById('albumWrap');
   const fileInput = document.getElementById('fileInput');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const uploadStatus = document.getElementById('uploadStatus');
-  let photos = []; // {name, sha, url}
+  let photos = []; // {name, sha, path}
+  const blobUrlCache = new Map(); // path -> object URL, avoids re-downloading each render
 
   function ghToken(){ return localStorage.getItem('gh_pat') || ''; }
 
@@ -469,15 +482,39 @@
     uploadStatus.classList.toggle('error', !!isError);
   }
 
-  function rawUrl(path){
-    return `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${path}?t=${Date.now()}`;
+  function mimeFromName(name){
+    const ext = name.split('.').pop().toLowerCase();
+    if(ext === 'jpg' || ext === 'jpeg') return 'image/jpeg';
+    if(ext === 'png') return 'image/png';
+    if(ext === 'gif') return 'image/gif';
+    if(ext === 'webp') return 'image/webp';
+    return 'application/octet-stream';
+  }
+
+  async function loadPhotoBlobUrl(path, name, sha){
+    if(blobUrlCache.has(path)) return blobUrlCache.get(path);
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/git/blobs/${sha}`, {
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': `token ${GH_READ_TOKEN}`
+      }
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data = await res.json();
+    const base64 = (data.content || '').replace(/\n/g, '');
+    const url = `data:${mimeFromName(name)};base64,${base64}`;
+    blobUrlCache.set(path, url);
+    return url;
   }
 
   async function fetchAlbumList(){
     setStatus('Завантажую список фото…');
     try{
       const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FOLDER}?ref=${GH_BRANCH}&_=${Date.now()}`, {
-        headers: { 'Accept': 'application/vnd.github+json' }
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `token ${GH_READ_TOKEN}`
+        }
       });
       if(res.status === 404){ photos = []; setStatus(''); renderAlbum(); return; }
       if(!res.ok) throw new Error('HTTP '+res.status);
@@ -489,7 +526,7 @@
       setStatus('');
       renderAlbum();
     }catch(err){
-      setStatus('Не вдалося завантажити альбом. Перевір з’єднання й спробуй "Оновити список".', true);
+      setStatus('Не вдалося завантажити альбом. Перевір, чи вставлено токен для читання, і чи репозиторій приватний.', true);
       renderAlbum();
     }
   }
@@ -504,17 +541,27 @@
     photos.forEach(p=>{
       const card = document.createElement('div');
       card.className = 'photo-card';
-      const src = rawUrl(p.path);
-      card.innerHTML = `<img src="${src}" alt="" loading="lazy"><button class="del" title="Видалити">×</button>`;
-      card.querySelector('img').addEventListener('click', ()=>{
-        lightboxImg.src = src;
-        lightbox.classList.add('active');
-      });
+      card.innerHTML = `<div class="spinner">🦁</div><button class="del" title="Видалити">×</button>`;
       card.querySelector('.del').addEventListener('click', (e)=>{
         e.stopPropagation();
         deletePhoto(p);
       });
       grid.appendChild(card);
+
+      loadPhotoBlobUrl(p.path, p.name, p.sha).then(url=>{
+        const img = document.createElement('img');
+        img.src = url; img.alt = ''; img.loading = 'lazy';
+        img.addEventListener('click', ()=>{
+          lightboxImg.src = url;
+          lightbox.classList.add('active');
+        });
+        const spinner = card.querySelector('.spinner');
+        if(spinner) spinner.replaceWith(img);
+        else card.prepend(img);
+      }).catch(()=>{
+        const spinner = card.querySelector('.spinner');
+        if(spinner) spinner.textContent = '⚠';
+      });
     });
     albumWrap.innerHTML = '';
     albumWrap.appendChild(grid);
